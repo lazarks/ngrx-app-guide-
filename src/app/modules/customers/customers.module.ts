@@ -6,6 +6,8 @@ import { CustomerAddComponent } from 'src/app/components/customer-add/customer-a
 import { CustomerEditComponent } from 'src/app/components/customer-edit/customer-edit.component';
 import { CustomerListComponent } from 'src/app/components/customer-list/customer-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
+import { customerReducer } from '../../state/customer.reducer';
 
 const customerRoutes: Routes = [{ path: '', component: CustomerComponent }];
 
@@ -15,6 +17,7 @@ const customerRoutes: Routes = [{ path: '', component: CustomerComponent }];
     ReactiveFormsModule,
     FormsModule,
     RouterModule.forChild(customerRoutes),
+    StoreModule.forFeature('customers', customerReducer),
   ],
   declarations: [
     CustomerComponent,

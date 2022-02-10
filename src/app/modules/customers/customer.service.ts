@@ -29,4 +29,8 @@ export class CustomerService {
       customer
     );
   }
+
+  deleteCustomer(payload: number) {
+    return this.http.delete(`${this.customersUrl}/${payload}`);
+  }
 }

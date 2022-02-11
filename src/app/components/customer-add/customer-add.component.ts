@@ -18,7 +18,7 @@ export class CustomerAddComponent implements OnInit {
     private store: Store<fromCustomer.AppState>
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.customerForm = this.fb.group({
       name: ['', Validators.required],
       phone: ['', Validators.required],
@@ -28,14 +28,14 @@ export class CustomerAddComponent implements OnInit {
   }
 
   createCustomer() {
-    let newCustomer: Customer = {
+    const newCustomer: Customer = {
       name: this.customerForm.get('name')?.value,
       phone: this.customerForm.get('phone')?.value,
       address: this.customerForm.get('address')?.value,
       membership: this.customerForm.get('membership')?.value,
     };
 
-    new customerActions.CreateCustomer(newCustomer);
+    this.store.dispatch(new customerActions.CreateCustomer(newCustomer));
 
     this.customerForm.reset();
   }

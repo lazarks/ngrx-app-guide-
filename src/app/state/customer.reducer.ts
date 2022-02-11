@@ -34,9 +34,6 @@ export function customerReducer(
   action: customerActions.CustomerAction
 ): CustomerState {
   switch (action.type) {
-    case customerActions.CustomerActionTypes.LOAD_CUSTOMERS: {
-      return { ...state, loading: true };
-    }
     case customerActions.CustomerActionTypes.LOAD_CUSTOMERS_SUCCESS: {
       return customerAdapter.setAll(action.payload, {
         ...state,
@@ -53,6 +50,50 @@ export function customerReducer(
         error: action.payload,
       };
     }
+
+    case customerActions.CustomerActionTypes.LOAD_CUSTOMER_SUCCESS: {
+      return customerAdapter.addOne(action.payload, {
+        ...state,
+        selectedCustomerId: action.payload.id!,
+      });
+    }
+    case customerActions.CustomerActionTypes.LOAD_CUSTOMER_Fail: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
+
+    case customerActions.CustomerActionTypes.CREATE_CUSTOMER_SUCCESS: {
+      return customerAdapter.addOne(action.payload, state);
+    }
+    case customerActions.CustomerActionTypes.CREATE_CUSTOMER_Fail: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
+
+    case customerActions.CustomerActionTypes.UPDATE_CUSTOMER_SUCCESS: {
+      return customerAdapter.updateOne(action.payload, state);
+    }
+    case customerActions.CustomerActionTypes.UPDATE_CUSTOMER_Fail: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
+
+    case customerActions.CustomerActionTypes.DELETE_CUSTOMER_SUCCESS: {
+      return customerAdapter.removeOne(action.payload, state);
+    }
+    case customerActions.CustomerActionTypes.DELETE_CUSTOMER_Fail: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
+
     default: {
       return state;
     }
@@ -62,7 +103,7 @@ export function customerReducer(
 const getCustomerFeatureState =
   createFeatureSelector<CustomerState>('customers');
 
-export const getCustomer = createSelector(
+export const getCustomers = createSelector(
   getCustomerFeatureState,
   customerAdapter.getSelectors().selectAll
 );
@@ -80,4 +121,14 @@ export const getCustomersLoaded = createSelector(
 export const getError = createSelector(
   getCustomerFeatureState,
   (state: CustomerState) => state.error
+);
+
+export const getCurrentCustomerId = createSelector(
+  getCustomerFeatureState,
+  (state: CustomerState) => state.selectedCustomerId
+);
+export const getCurrentCustomer = createSelector(
+  getCustomerFeatureState,
+  getCurrentCustomerId,
+  (state) => state.entities[state.selectedCustomerId!]
 );
